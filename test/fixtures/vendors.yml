@@ -1,0 +1,19 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  city_state: MyString
+  items: MyText
+  lat: 1.5
+  lng: 1.5
+  notes: MyText
+  street: MyString
+  vendor: MyString
+
+two:
+  city_state: MyString
+  items: MyText
+  lat: 1.5
+  lng: 1.5
+  notes: MyText
+  street: MyString
+  vendor: MyString

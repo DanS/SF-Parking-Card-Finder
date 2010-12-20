@@ -2,14 +2,12 @@
 <html>
 <head>
   <title>Nearest Parking Card Vendors</title>
-  <script src="http://www.google.com/jsapi?key=<%= ENV['PARKING_CARD_KEY'] %>"
-  type="text/javascript"></script>
-  <script type="text/javascript">
-    google.load("maps" , "2");
-  </script>
-  <%#= stylesheet_link_tag :all %>
-  <%= javascript_include_tag :defaults,  "application.js" %>
+  <%= javascript_include_tag "application.js" %>
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
   <%= javascript_tag "var AUTH_TOKEN = #{form_authenticity_token.inspect};" if protect_against_forgery? -%>
+  <script type="text/javascript"
+          src="http://maps.google.com/maps/api/js?sensor=true">
+  </script>
 </head>
 <body>
 <h2>Nearest Parking Card Vendors</h2>

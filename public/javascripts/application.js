@@ -1,67 +1,66 @@
 var map;
-var centerLatitude = 37.75;
-var centerLongitude = -122.444;
-var startZoom = 12;
-var markerHash = {};
-var currentFocus = false;
+var infoWindow;
+
+function request_vendors(current_location) {
+  if (current_location) {
+    var params = {'lat':current_location[0], 'lng': current_location[1], 'authenticity_token': AUTH_TOKEN};
+    $.post('vendors/list.json', params, getMarkers, 'json')
+  }
+}
 
 function findLocation() {
-  var output = null;
   if (navigator.geolocation) {
     browserSupportFlag = true;
     navigator.geolocation.getCurrentPosition(function(position) {
-      output = [ position.coords.latitude, position.coords.longitude]
+      request_vendors([position.coords.latitude, position.coords.longitude]);
     });
+  } else {
+    if (google.gears) {
+      browserSupportFlag = true;
+      var geo = google.gears.factory.create('beta.geolocation');
+      geo.getCurrentPosition(function(position) {
+        request_vendors([position.coords.latitude, position.coords.longitude]);
+      })
+    } else {
+      alert("Unable to determine location, geolocation is not available")
+    }
   }
-  return output;
 }
 
-function addMarker(latitude, longitude, infoText) {
-  var latlng = new GLatLng(latitude, longitude);
-  var marker = new GMarker(latlng);
-  GEvent.addListener(marker, 'click',
-                    function(latlng) {
-                      map.openInfoWindow(latlng, infoText)
-                    }
-      );
-  map.addOverlay(marker);
+function addMarker(latitude, longitude, infoText, name) {
+  var latlng = new google.maps.LatLng(latitude, longitude);
+  var marker = new google.maps.Marker({position:latlng, map: map, title:name});
+  google.maps.event.addListener(marker, 'click', function() {
+      infoWindow.content = infoText;
+      infoWindow.position = latlng;
+      infoWindow.open(map, marker);
+  });
   return marker;
 }
 
-function init() {
-  map = new GMap($("map"));
-  var markers;
-  var location = findLocation();
-  if (location) {
-    var params = "lat=" + location[0] + "&lng=" + location[1] + '&authenticity_token=' + AUTH_TOKEN;
-    var request = GXmlHttp.create();
-    request.open('POST', 'vendors/list.json', true);
-    request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    request.setRequestHeader("Content-length", params.length);
-    request.setRequestHeader("Connection", "close");
-    request.onreadystatechange = function() {
+function getMarkers(markers, statusString) {
+  $('#waiting').hide();
+  var bounds = new google.maps.LatLngBounds();
+  for (var i = 0; i < markers.length; i++) {
+    var current = markers[i].vendor;
+    var markerText = createMarkerText(current.vendor, current.street);
+    var marker = addMarker(current.lat, current.lng, markerText, current.vendor);
+    bounds.extend(marker.getPosition());
+    createLabelText(current, marker, markerText);
+    map.fitBounds(bounds)
+  }
+}
 
-      if (request.readyState == 4) {
-        $('waiting').hide()
-        markers = eval( request.responseText);
-        map.addControl(new GSmallMapControl());
-        map.setCenter(new GLatLng(centerLatitude, centerLongitude), startZoom);
-        var bounds = new GLatLngBounds();
-        for (var i = 0; i < markers.length; i++) {
-          var current = markers[i].vendor;
-          marker = addMarker(current.lat, current.lng, createMarkerText(current.vendor, current.street));
-          bounds.extend(marker.getPoint());
-          createLabelText(current);
-        }
-        map.setZoom(map.getBoundsZoomLevel(bounds));
-        map.setCenter(bounds.getCenter());
-      }
-    };
-    request.send(params);
-  }
-  else {
-    alert('Sorry dude this browser does not support location')
-  }
+function init() {
+  var latlng = new google.maps.LatLng(37.75, -122.444);
+  var myOptions = {
+    zoom: 12,
+    center: latlng,
+    mapTypeId: google.maps.MapTypeId.ROADMAP
+  };
+  map = new google.maps.Map(document.getElementById("map"), myOptions);
+  infoWindow = new google.maps.InfoWindow({ content: '---' });
+  findLocation();
 }
 
 function createMarkerText(vendor, address) {
@@ -73,24 +72,20 @@ function createMarkerText(vendor, address) {
   return p;
 }
 
-function createLabelText(vendor) {
+function createLabelText(vendor, marker, markerText) {
   var div = document.createElement('div');
   div.className = 'sidebar-label'
   var strong = document.createElement('strong');
   strong.appendChild(document.createTextNode(vendor.vendor));
   div.appendChild(strong);
   div.appendChild(document.createTextNode(' ' + vendor.street));
+
   div.onclick = function() {
-    showInfoWindow(vendor)
+    infoWindow.content = markerText;
+    infoWindow.position = marker.position;
+    infoWindow.open(map, marker);
   };
   document.getElementById('labels').appendChild(div);
 }
 
-function showInfoWindow(vendor) {
-  var latlng = new GLatLng(vendor.lat, vendor.lng);
-  var info = createMarkerText(vendor.vendor, vendor.street);
-  map.openInfoWindowHtml(latlng, info);
-}
-
 window.onload = init;
-window.onunload = GUnload;

@@ -3,6 +3,7 @@ var infoWindow;
 
 function request_vendors(current_location) {
   console.log('entering request_vendors with current location = ' + current_location[0] + ' ' + current_location[1]);
+  console.log('auth_token = ' + AUTH_TOKEN);
   var params = {'lat':current_location[0], 'lng': current_location[1], 'authenticity_token': AUTH_TOKEN};
   console.log('params = ' + params);
   $.post('vendors/list.json', params, getMarkers, 'json')

@@ -3,6 +3,7 @@ var infoWindow;
 
 function request_vendors(current_location) {
   console.log('entering request_vendors');
+  debugger;
   if (current_location) {
     var params = {'lat':current_location[0], 'lng': current_location[1], 'authenticity_token': AUTH_TOKEN};
     $.post('vendors/list.json', params, getMarkers, 'json')
@@ -56,7 +57,6 @@ function getMarkers(markers, statusString) {
 }
 
 function init() {
-  alert('running init');
   console.log('entering init');
   var latlng = new google.maps.LatLng(37.75, -122.444);
   var myOptions = {

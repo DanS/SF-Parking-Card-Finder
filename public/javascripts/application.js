@@ -2,6 +2,7 @@ var map;
 var infoWindow;
 
 function request_vendors(current_location) {
+  console.log('entering request_vendors');
   if (current_location) {
     var params = {'lat':current_location[0], 'lng': current_location[1], 'authenticity_token': AUTH_TOKEN};
     $.post('vendors/list.json', params, getMarkers, 'json')
@@ -9,6 +10,7 @@ function request_vendors(current_location) {
 }
 
 function findLocation() {
+  console.log('entering findLocation');
   if (navigator.geolocation) {
     browserSupportFlag = true;
     navigator.geolocation.getCurrentPosition(function(position) {
@@ -28,6 +30,7 @@ function findLocation() {
 }
 
 function addMarker(latitude, longitude, infoText, name) {
+  console.log('entering addMarker');
   var latlng = new google.maps.LatLng(latitude, longitude);
   var marker = new google.maps.Marker({position:latlng, map: map, title:name});
   google.maps.event.addListener(marker, 'click', function() {
@@ -39,6 +42,7 @@ function addMarker(latitude, longitude, infoText, name) {
 }
 
 function getMarkers(markers, statusString) {
+  console.log('entering getMarkers');
   $('#waiting').hide();
   var bounds = new google.maps.LatLngBounds();
   for (var i = 0; i < markers.length; i++) {
@@ -52,6 +56,7 @@ function getMarkers(markers, statusString) {
 }
 
 function init() {
+  console.log('entering init');
   var latlng = new google.maps.LatLng(37.75, -122.444);
   var myOptions = {
     zoom: 12,
@@ -64,6 +69,7 @@ function init() {
 }
 
 function createMarkerText(vendor, address) {
+  console.log('entering createMarkerText');
   var h = document.createElement('h3');
   h.appendChild(document.createTextNode(vendor));
   var p = document.createElement('p');
@@ -73,6 +79,7 @@ function createMarkerText(vendor, address) {
 }
 
 function createLabelText(vendor, marker, markerText) {
+  console.log('entering createLabelText');
   var div = document.createElement('div');
   div.className = 'sidebar-label'
   var strong = document.createElement('strong');

@@ -56,6 +56,7 @@ function getMarkers(markers, statusString) {
 }
 
 function init() {
+  alert('running init');
   console.log('entering init');
   var latlng = new google.maps.LatLng(37.75, -122.444);
   var myOptions = {

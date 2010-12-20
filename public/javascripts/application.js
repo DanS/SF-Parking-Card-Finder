@@ -2,12 +2,10 @@ var map;
 var infoWindow;
 
 function request_vendors(current_location) {
-  console.log('entering request_vendors');
-  debugger;
-  if (current_location) {
-    var params = {'lat':current_location[0], 'lng': current_location[1], 'authenticity_token': AUTH_TOKEN};
-    $.post('vendors/list.json', params, getMarkers, 'json')
-  }
+  console.log('entering request_vendors with current location = ' + current_location[0] + ' ' + current_location[1]);
+  var params = {'lat':current_location[0], 'lng': current_location[1], 'authenticity_token': AUTH_TOKEN};
+  console.log('params = ' + params);
+  $.post('vendors/list.json', params, getMarkers, 'json')
 }
 
 function findLocation() {
@@ -35,9 +33,9 @@ function addMarker(latitude, longitude, infoText, name) {
   var latlng = new google.maps.LatLng(latitude, longitude);
   var marker = new google.maps.Marker({position:latlng, map: map, title:name});
   google.maps.event.addListener(marker, 'click', function() {
-      infoWindow.content = infoText;
-      infoWindow.position = latlng;
-      infoWindow.open(map, marker);
+    infoWindow.content = infoText;
+    infoWindow.position = latlng;
+    infoWindow.open(map, marker);
   });
   return marker;
 }

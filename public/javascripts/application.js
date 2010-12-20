@@ -36,9 +36,9 @@ parkingCardApp = {
     var latlng = new google.maps.LatLng(latitude, longitude);
     var marker = new google.maps.Marker({position:latlng, map: parkingCardApp.map, title:name});
     google.maps.event.addListener(marker, 'click', function() {
-      infoWindow.content = infoText;
-      infoWindow.position = latlng;
-      infoWindow.open(map, marker);
+      parkingCardApp.infoWindow.content = infoText;
+      parkingCardApp.infoWindow.position = latlng;
+      parkingCardApp.infoWindow.open(parkingCardApp.map, marker);
     });
     return marker;
   },
@@ -86,9 +86,9 @@ parkingCardApp = {
     div.appendChild(document.createTextNode(' ' + vendor.street));
 
     div.onclick = function() {
-      infoWindow.content = markerText;
-      infoWindow.position = marker.position;
-      infoWindow.open(map, marker);
+      parkingCardApp.infoWindow.content = markerText;
+      parkingCardApp.infoWindow.position = marker.position;
+      parkingCardApp.infoWindow.open(parkingCardApp.map, marker);
     };
     document.getElementById('labels').appendChild(div);
   }

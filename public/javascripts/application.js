@@ -2,15 +2,17 @@ var map;
 var infoWindow;
 
 function request_vendors(current_location) {
-  console.log('entering request_vendors with current location = ' + current_location[0] + ' ' + current_location[1]);
-  //console.log('auth_token = ' + AUTH_TOKEN);
-  var params = {'lat':current_location[0], 'lng': current_location[1]} //, 'authenticity_token': AUTH_TOKEN};
-  console.log('params = ' + params);
+  var params;
+  try { // don't use auth_token if its not there
+    params = {'lat':current_location[0], 'lng': current_location[1], 'authenticity_token': AUTH_TOKEN};
+  } catch(err) {
+    console.log(err);
+    params = {'lat':current_location[0], 'lng': current_location[1]};
+  }
   $.post('vendors/list.json', params, getMarkers, 'json')
 }
 
 function findLocation() {
-  console.log('entering findLocation');
   if (navigator.geolocation) {
     browserSupportFlag = true;
     navigator.geolocation.getCurrentPosition(function(position) {
@@ -30,7 +32,6 @@ function findLocation() {
 }
 
 function addMarker(latitude, longitude, infoText, name) {
-  console.log('entering addMarker');
   var latlng = new google.maps.LatLng(latitude, longitude);
   var marker = new google.maps.Marker({position:latlng, map: map, title:name});
   google.maps.event.addListener(marker, 'click', function() {
@@ -41,8 +42,7 @@ function addMarker(latitude, longitude, infoText, name) {
   return marker;
 }
 
-function getMarkers(markers, statusString) {
-  console.log('entering getMarkers');
+function getMarkers(markers) {
   $('#waiting').hide();
   var bounds = new google.maps.LatLngBounds();
   for (var i = 0; i < markers.length; i++) {
@@ -56,7 +56,6 @@ function getMarkers(markers, statusString) {
 }
 
 function init() {
-  console.log('entering init');
   var latlng = new google.maps.LatLng(37.75, -122.444);
   var myOptions = {
     zoom: 12,
@@ -69,7 +68,6 @@ function init() {
 }
 
 function createMarkerText(vendor, address) {
-  console.log('entering createMarkerText');
   var h = document.createElement('h3');
   h.appendChild(document.createTextNode(vendor));
   var p = document.createElement('p');
@@ -79,9 +77,8 @@ function createMarkerText(vendor, address) {
 }
 
 function createLabelText(vendor, marker, markerText) {
-  console.log('entering createLabelText');
   var div = document.createElement('div');
-  div.className = 'sidebar-label'
+  div.className = 'sidebar-label';
   var strong = document.createElement('strong');
   strong.appendChild(document.createTextNode(vendor.vendor));
   div.appendChild(strong);

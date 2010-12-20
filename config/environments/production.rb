@@ -4,7 +4,7 @@
 # Code is not reloaded between requests
 config.cache_classes = true
 
-config.action_controller.allow_forgery_protection = false
+config.action_controller.allow_forgery_protection = true
 
 # Full error reports are disabled and caching is turned on
 config.action_controller.consider_all_requests_local = true

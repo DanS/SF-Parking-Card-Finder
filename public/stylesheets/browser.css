@@ -1,0 +1,29 @@
+.sidebar-label {
+    height: 20px;
+    border: 1px solid black;
+    padding-left: 5px;
+  }
+  .sidebar-label:hover{
+    color: white;
+    background-color: black;
+  }
+  #waiting div {
+    width: 180px;
+    float: left;
+    margin-left: 10px;
+  }
+  #waiting img{
+    position: relative;
+    bottom: 5px;
+    float: left;
+  }
+  #map{
+    clear: both;
+    width: 500px;
+    height: 500px;
+  }
+
+  #labels{
+    clear: both;
+    width: 500px;
+  }

@@ -13,21 +13,30 @@ parkingCardApp = {
     $.post('vendors/list.json', params, parkingCardApp.getMarkers, 'json')
   },
 
+  'showAllVendors': function() {
+    $('#waiting').hide();
+    $('#waiting').after('<div id="done">Unable to determine location. <br /> Displaying all vendors zoom map to your location</div>');
+    var params = {};
+    $.post('vendors/listAll.json', params, parkingCardApp.getMarkers, 'json')
+  },
+
   'findLocation': function() {
     if (navigator.geolocation) {
-      browserSupportFlag = true;
       navigator.geolocation.getCurrentPosition(function(position) {
-        parkingCardApp.request_vendors([position.coords.latitude, position.coords.longitude]);
-      });
+        parkingCardApp.request_vendors([position.coords.latitude, position.coords.longitude])
+      },
+          parkingCardApp.showAllVendors,
+      {maximumAge:1, timeout:5000}
+          );
     } else {
       if (google.gears) {
-        browserSupportFlag = true;
         var geo = google.gears.factory.create('beta.geolocation');
         geo.getCurrentPosition(function(position) {
-          parkingCardApp.request_vendors([position.coords.latitude, position.coords.longitude]);
-        })
+          parkingCardApp.request_vendors([position.coords.latitude, position.coords.longitude])
+        },
+            parkingCardApp.showAllVendors());
       } else {
-        alert("Unable to determine location, geolocation is not available")
+        parkingCardApp.showAllVendors();
       }
     }
   },

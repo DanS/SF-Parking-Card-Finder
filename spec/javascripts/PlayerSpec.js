@@ -1,4 +1,33 @@
 describe("Player", function() {
+
+  //added to try and make jasmine run
+  // overcame a number of errors, now it fails silently
+//  google = {
+//    maps: {
+//      LatLng: function() {},
+//      MapTypeId: {
+//        'ROADMAP': null
+//      },
+//      Map: function(){},
+//      InfoWindow: function(){}
+//    }
+//  };
+  AUTH_TOKEN = null;
+
+//a different attempt to get the remote .js files to load
+//still doesn't work
+  function addScript(path) {
+    var doc = window.document || win.getDocument();
+    var head = doc.getElementsByTagName("head")[0] ||
+        document.documentElement;
+    var script = doc.createElement('script');
+    script.type = 'text/javascript';
+    script.src = path;
+    head.appendChild(script);
+  }
+  addScript("https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js");
+  addScript("http://maps.google.com/maps/api/js?sensor=true");
+
   var player;
   var song;
 
@@ -50,9 +79,10 @@ describe("Player", function() {
     it("should throw an exception if song is already playing", function() {
       player.play(song);
 
-      expect(function() {
-        player.resume();
-      }).toThrow("song is already playing");
+      expect(
+            function() {
+              player.resume();
+            }).toThrow("song is already playing");
     });
   });
 });

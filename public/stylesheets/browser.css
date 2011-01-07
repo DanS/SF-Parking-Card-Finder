@@ -26,3 +26,9 @@
     clear: both;
     width: 500px;
   }
+
+  #updated{
+    width: 10%;
+    float: right;
+    font-size: xx-small;
+  }

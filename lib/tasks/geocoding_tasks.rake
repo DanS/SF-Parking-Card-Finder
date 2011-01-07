@@ -1,6 +1,9 @@
 require 'open-uri'
 require 'rexml/document'
 
+#heroku wants a task named cron for the daily cron job to run
+task :cron => [:google_geocode, :environment]
+
 # retrieve geocode information for all records in the stores table
 task :google_geocode => [:fetch_vendors, :environment] do
   api_key = ENV['PARKING_CARD_KEY']

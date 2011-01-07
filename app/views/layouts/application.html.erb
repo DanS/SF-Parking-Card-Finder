@@ -15,6 +15,7 @@
 </head>
 <body>
 <h3>Nearest Parking Card Vendors</h3>
+<p id="updated">Updated: <%= "#{Vendor.last.updated_at.localtime.strftime("%m/%d/%y")}" %></p>
 <%= yield %>
 
 </body>

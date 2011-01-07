@@ -61,7 +61,9 @@ parkingCardApp = {
       var marker = parkingCardApp.addMarker(current.lat, current.lng, markerText, current.vendor);
       bounds.extend(marker.getPosition());
       parkingCardApp.createLabelText(current, marker, markerText);
-      parkingCardApp.map.fitBounds(bounds)
+      if(markers.length < 11){
+        parkingCardApp.map.fitBounds(bounds)
+      }
     }
   },
 

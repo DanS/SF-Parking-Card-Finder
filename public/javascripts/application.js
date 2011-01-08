@@ -15,7 +15,7 @@ parkingCardApp = {
 
   'showAllVendors': function() {
     $('#waiting').hide();
-    $('#waiting').after('<div id="done">Unable to determine location. <br /> Displaying all vendors zoom map to your location</div>');
+    $('#waiting').after('<div id="done">Unable to determine location. <br /> Displaying all vendors.<br /> Manually zoom map to your location</div>');
     var params = {};
     $.post('vendors/listAll.json', params, parkingCardApp.getMarkers, 'json')
   },
@@ -85,7 +85,7 @@ parkingCardApp = {
     var p = document.createElement('p');
     p.appendChild(h);
     p.appendChild(document.createTextNode(address));
-    return p;
+    return p;mate
   },
 
   'createLabelText': function(vendor, marker, markerText) {
